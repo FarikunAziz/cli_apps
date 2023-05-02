@@ -4,7 +4,10 @@
 #include <random>
 #include <string_view>
 
-//fungsi random ini untuk menentukan monster secara acak dan dipakai untuk menentukan > 50 atau dibawahnya
+/*
+ *Orignal project from learncpp.com
+ * */
+
 int get_random_numbers(int min, int max){
    std::mt19937_64 twister {static_cast<std::mt19937_64::result_type>(std::time(nullptr))};
    std::uniform_int_distribution<int> random_number(min, max);
@@ -12,7 +15,6 @@ int get_random_numbers(int min, int max){
 }
 
 class Creature{
-//karena kita akan mewariskannya ke class turunan
 protected:
    std::string m_name;
    std::string m_symbol;
@@ -74,7 +76,6 @@ public:
    Potion(int healt, int damage, PotionType pt) : m_health_potion(healt), m_damage_potion(damage), m_pt(pt){}
 
    static Potion random_potion(){
-      //data dari look-up table tadi diacak disini, referensi mengenai apa itu static bisa dilihat di beyond_of_topics/casting
       return potion_data(static_cast<PotionType>(get_random_numbers(0, static_cast<int>(PotionType::max_size) - 1)));
    }
 
@@ -134,7 +135,6 @@ private:
       static std::array<Potion, static_cast<int>(PotionType::max_size)>data
       {
          {
-            //ini namanya look-up table, dimana kita menulis data secara manual, data yang ditulis disini tergantung dari property class yang dimaksud, class ini memiliki 3 member dan kita akan mengisinya maka kita juga menyediakan 3 jenis data tersebut, mirip class Monster tapi class Monster membuat look-up table dari class Creature
             {2,0,PotionType::HEALT_SMALL},
             {2,0,PotionType::HEALT_MEDIUM},
             {5,0,PotionType::HEALT_LARGE},
@@ -154,7 +154,6 @@ class Player : public Creature{
 private:
    int m_player_level {1};
 public:
-   //:Creature{} adalah constructor delegating (class/oop/constructor_delegaton)
    Player(std::string_view name) : Creature{name, "@", 10, 1, 0}{}
 
    void level_up(){
@@ -183,7 +182,6 @@ public:
       return Monster {static_cast<Type>(acak)};
    }
 private:
-   //kenapa tidak Monster&, karena Monster tidak mendukung member yang ada dalam array, member tersebut ada di class Creature, dan fungsi ini juga akan dilewatkan ke Creature 
    static const Creature& get_default_creature(Type t){
       static std::array<Creature, static_cast<std::size_t>(Type::max_types)> monster_stat{
          {
